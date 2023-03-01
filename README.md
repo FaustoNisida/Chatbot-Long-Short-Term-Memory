@@ -1,4 +1,4 @@
-# AI-Chatbot-Long-Term-Memory
+# Chatbot with Long and Short Term Memory
 This repository contains an advanced chatbot created with the OpenAI API that leverages long-term memory, advanced logic, embeddings, and databases to provide a truly unique user experience. Unlike traditional chatbots that simply respond to user input based on pre-defined rules or scripts, this chatbot can remember what you said in earlier conversations and build upon that knowledge to provide more personalized and relevant responses.
 
 The chatbot's advanced logic capabilities also mean that it can handle more complex conversations and provide more nuanced responses, making it feel like you're chatting with a real person. Additionally, the chatbot uses embeddings and databases to achieve long-term memory, allowing it to retain information from previous conversations and use that information to inform future interactions.
