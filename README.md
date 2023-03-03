@@ -9,7 +9,7 @@ One of the key features of this chatbot is its flexible prompts. For example, th
 
 ### Features:
 
-- Uses OpenAI API for advanced natural language processing
+- Uses the latest model (gpt-3.5-turbo) of OpenAI API for advanced natural language processing
 
 - Long-term memory achieved through embeddings and databases
 
