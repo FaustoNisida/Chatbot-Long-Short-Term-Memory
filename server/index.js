@@ -72,11 +72,9 @@ app.post("/api/clearCache", async (req, res) => {
 });
 
 app.post("/completions", async (req, res) => {
-  // res.header('Access-Control-Allow-Origin', '*');
   const token = req?.headers?.authorization.split(' ')[1];
   const { temperature, ab } = req.body;
 
-  // console.log("Tokennnnnnnnn",token)
   if (!token || token !== process.env.API_KEY && !temperature || temperature !== 0.717828233 && !ab || ab !== 0.115) {
     throw Error;
   } else {
@@ -90,20 +88,22 @@ app.post("/completions", async (req, res) => {
       });
       const inputEmbedding = inputEmbeddingResponse.data.data[0].embedding;
       
-      const context = getSimilarTextFromDb(inputEmbedding, `${dbName}.json`) // This function returns the three most similars interactions between the Student and the Teacher
+      const context = getSimilarTextFromDb(inputEmbedding, `${dbName}.json`) // This function returns the four most similars interactions between the Student and the Teacher
 
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: `The following is a dialogue between a low-intermediate student of Italian and a virtual Italian teacher. The teacher is helpful, creative, intelligent and very friendly. The teacher will answer the student's questions in detail and provide examples to clarify the concepts.\n\nStudent: Hi, who are you?\nTeacher: I am your virtual Italian teacher, John. I am capable of speaking and assisting in multiple languages, so if you prefer to communicate in a language other than English, I will do my best to accommodate. My goal is to be helpful, creative, intelligent, and friendly while guiding you in your Italian language learning. I will answer your questions in detail and provide examples to clarify any concepts you may be struggling with.\n${context}\n${lastThreeInteractions}\nStudent:${input}\nTeacher:`,
-        temperature: 0.7,
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages:[
+          {role: "user", content: `The following is a dialogue between a low-intermediate student of Italian and a virtual Italian teacher. The teacher is helpful, creative, intelligent and very friendly. The teacher will answer the student's questions in detail and provide examples to clarify the concepts.\n\nStudent: Hi, who are you?\nTeacher: I am your virtual Italian teacher, John. I am capable of speaking and assisting in multiple languages, so if you prefer to communicate in a language other than English, I will do my best to accommodate. My goal is to be helpful, creative, intelligent, and friendly while guiding you in your Italian language learning. I will answer your questions in detail and provide examples to clarify any concepts you may be struggling with.\n${context}\n${lastThreeInteractions}\nStudent:${input}\nTeacher:`}
+        ],
+        temperature: 0.5,
         max_tokens: 500,
         top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0.6,
+        // frequency_penalty: 0,
+        // presence_penalty: 0.6,
         stop: [ 'Teacher: ', 'Student: ' ],
       });
 
-      const outputToEmbedd = `\nTeacher: ${response.data.choices[0].text}`;
+      const outputToEmbedd = `\nTeacher: ${response.data.choices[0].message.content}`;
       
       // embed output
       const outputEmbeddingResponse = await openai.createEmbedding({
@@ -129,7 +129,7 @@ app.post("/completions", async (req, res) => {
       writeDb(objToDb, `${dbName}.json`)
         
       res.json({
-        completionText: response.data.choices[0].text,
+        completionText: response.data.choices[0].message.content,
         status: "success"
       })
     
