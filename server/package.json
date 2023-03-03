@@ -22,7 +22,7 @@
     "mongoose": "^6.9.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
-    "openai": "^3.1.0",
+    "openai": "^3.2.1",
     "weaviate-client": "^2.14.4"
   }
 }
