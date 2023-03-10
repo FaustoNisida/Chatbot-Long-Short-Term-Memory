@@ -73,6 +73,10 @@ Create your **openai key** [here](https://platform.openai.com/account/api-keys)
 
 Create a project and then a **google client id** [here](https://console.cloud.google.com/apis/credentials)
 
+Make sure in the settings of the google id creation page, to change the following properties: 
+![1](https://user-images.githubusercontent.com/22509324/224191782-1cbc7772-f86f-406c-80ed-063a89201bde.png)
+![2](https://user-images.githubusercontent.com/22509324/224191800-7e2d370a-836b-4f04-9702-a07bd069dc7e.png)
+
 **In the `VITE_Api_Key` field you have to place the same password or key that you placed in the `API_KEY` enviromental variable of the client .env file**
 
 Now you are ready to use the application
