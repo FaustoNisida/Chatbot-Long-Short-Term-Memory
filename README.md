@@ -75,6 +75,16 @@ Create a project and then a **google client id** [here](https://console.cloud.go
 
 To ensure that your Google Client ID is properly configured, it is essential to include the following origins during the creation process:
 
+**Authorized JavaScript origins:**
+- http://localhost:5173
+- http://localhost:3000
+- http://localhost
+
+**Authorized redirect URIs:**
+- http://localhost:5173
+- http://localhost:3000/access
+- http://localhost
+
 ![1](https://user-images.githubusercontent.com/22509324/224191782-1cbc7772-f86f-406c-80ed-063a89201bde.png)
 ![2](https://user-images.githubusercontent.com/22509324/224191800-7e2d370a-836b-4f04-9702-a07bd069dc7e.png)
 
