@@ -113,6 +113,16 @@ body {
 }
 
 
+/* Add some space between paragraphs in the bot response */
+.markdownRender > * {
+  margin-top: .5rem;
+}
+
+.markdownRender > *:first-child {
+  margin-top: 0;
+}
+
+
 .infoi {
   background: rgba(255, 255, 255, 0);
   border-radius: 16px;

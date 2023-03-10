@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from "react-router-dom"
+import ReactMarkdown from 'react-markdown'
+
 import '../index.css';
 import"../App.css"
 
@@ -64,7 +66,15 @@ function Welcome() {
             {chatMessages.map((message, index) => (
             <div key={index} className={`my-2 ${message.type === 'bot' ? 'text-gray-700' : 'text-gray-900'}`}>
               <p className="font-bold text-gray-600">{message.type === 'bot' ? 'Bot' : 'You'}</p>
-              <p ref={scrollDown} className='text-white'>{message.text}</p>
+              {message.type === 'bot' ? (
+                <div ref={scrollDown}>
+                  <ReactMarkdown 
+                    children={message.text} 
+                    className="text-white markdownRender" />
+                </div>
+              ) : (
+                <p ref={scrollDown} className="text-white">{message.text}</p>
+              )}
             </div>  
           ))}
           {loading && (
