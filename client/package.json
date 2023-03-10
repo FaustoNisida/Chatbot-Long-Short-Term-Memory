@@ -30,6 +30,7 @@
     "react-dom": "^18.2.0",
     "react-google-login": "^5.2.2",
     "react-icons": "^4.7.1",
+    "react-markdown": "^8.0.5",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",
     "simplebar-react": "^2.4.3"
