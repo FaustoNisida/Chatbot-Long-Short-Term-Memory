@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="http://localhost:5173/src/emotiv.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emotiv Character</title>
+    <script>
+      const sentimentToImageMap = {
+        character1: {
+          angry: "http://localhost:5173/src/assets/character1/angry.png",
+          apologetic:
+            "http://localhost:5173/src/assets/character1/apologetic.png",
+          gracious: "http://localhost:5173/src/assets/character1/gracious.png",
+          happy: "http://localhost:5173/src/assets/character1/happy.png",
+          musing: "http://localhost:5173/src/assets/character1/musing.png",
+          neutral: "http://localhost:5173/src/assets/character1/neutral.png",
+          sad: "http://localhost:5173/src/assets/character1/sad.png",
+          surprised:
+            "http://localhost:5173/src/assets/character1/surprised.png",
+        },
+        character2: {
+          angry: "http://localhost:5173/src/assets/character2/angry.png",
+          apologetic:
+            "http://localhost:5173/src/assets/character2/apologetic.png",
+          gracious: "http://localhost:5173/src/assets/character2/gracious.png",
+          happy: "http://localhost:5173/src/assets/character2/happy.png",
+          musing: "http://localhost:5173/src/assets/character2/musing.png",
+          neutral: "http://localhost:5173/src/assets/character2/neutral.png",
+          sad: "http://localhost:5173/src/assets/character2/sad.png",
+          surprised:
+            "http://localhost:5173/src/assets/character2/surprised.png",
+        },
+        character3: {
+          angry: "http://localhost:5173/src/assets/character3/angry.png",
+          apologetic:
+            "http://localhost:5173/src/assets/character3/apologetic.png",
+          gracious: "http://localhost:5173/src/assets/character3/gracious.png",
+          happy: "http://localhost:5173/src/assets/character3/happy.png",
+          musing: "http://localhost:5173/src/assets/character3/musing.png",
+          neutral: "http://localhost:5173/src/assets/character3/neutral.png",
+          sad: "http://localhost:5173/src/assets/character3/sad.png",
+          surprised:
+            "http://localhost:5173/src/assets/character3/surprised.png",
+        },
+      };
+
+      let currentSentiment = "neutral";
+
+      function displayImage(sentiment) {
+        const folderSelect = document.getElementById("folder-select");
+        const folderName = folderSelect.value;
+        const image = document.getElementById("image");
+        const imageUrl = sentimentToImageMap[folderName][sentiment];
+
+        image.classList.add("image-transition-hidden");
+
+        setTimeout(() => {
+          image.src = imageUrl;
+          image.alt = folderName;
+          image.classList.remove("image-transition-hidden");
+        }, 300);
+      }
+
+      function updateCharacter() {
+        displayImage(currentSentiment);
+      }
+
+      async function displaySentiment() {
+        const pollInterval = 3000; // 3 seconds
+        let prevSentiment = null;
+        setInterval(async () => {
+          try {
+            const response = await fetch("http://localhost:3000/getSentiment");
+            const data = await response.json();
+
+            if (data.sentiment && data.sentiment !== prevSentiment) {
+              currentSentiment = data.sentiment;
+              const sentimentDiv = document.getElementById("sentiment");
+              sentimentDiv.innerHTML = `Feeling: ${data.sentiment}`;
+              // const folderName = folderSelect.value;
+              displayImage(data.sentiment);
+            }
+          } catch (error) {
+            console.error("Error fetching sentiment:", error);
+          }
+        }, pollInterval);
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        displaySentiment();
+        displayImage("neutral");
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Emotiv Page</h1>
+
+      <img
+        id="image"
+        class="image-transition"
+        src="http://localhost:5173/src/assets/character1/neutral.png"
+        alt="Neutral"
+      />
+      <div id="sentiment"></div>
+      <div>
+        <label id="folder" for="folder-select">Select a folder:</label>
+        <select id="folder-select" onchange="updateCharacter()">
+          <option value="character1">Character 1</option>
+          <option value="character2">Character 2</option>
+          <option value="character3">Character 3</option>
+        </select>
+      </div>
+    </div>
+  </body>
+</html>

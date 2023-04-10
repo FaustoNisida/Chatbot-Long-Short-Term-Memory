@@ -13,13 +13,13 @@ const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-  <ChatProvider>
-    <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </React.StrictMode>
-  </ChatProvider>,
+    <ChatProvider>
+      <React.StrictMode>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </React.StrictMode>
+    </ChatProvider>
   </Provider>,
 
 )
