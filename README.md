@@ -24,7 +24,6 @@ One of the key features of this chatbot is its flexible prompts. For example, th
 
 If you're looking for a chatbot that goes beyond simple scripts and rules, and can provide a more personalized and engaging user experience while also maintaining the security of user information, this AI-powered chatbot with long-term memory, advanced logic, and KYC authentication is the perfect solution!
 
-![Screenshot_20230206_085823](https://user-images.githubusercontent.com/115468971/236481518-4fe5c315-79e9-4141-a7e9-25d3d43c7b1f.png)
 
 ## Installation
 
