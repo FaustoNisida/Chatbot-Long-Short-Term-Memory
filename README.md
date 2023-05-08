@@ -115,6 +115,8 @@ Start the client by running the command `npm run dev`.
 
 The client and server are now running and you can access the application by visiting http://localhost:5173 in your web browser.
 
+Important: make sure to open the page with localhost and NOT 127.0.0.1
+
 Enjoy the usage!
 
 ## Recommendations
