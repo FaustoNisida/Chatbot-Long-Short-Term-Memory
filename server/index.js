@@ -5,12 +5,17 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 const { Configuration, OpenAIApi } = require("openai");
 const { writeDb, createDb, getCurrentDateTime, getSimilarTextFromDb, clearJsonFile, readDb } = require("./dbFunctions")
+const fetch = require("node-fetch");
+
+const path = require('path'); // Path for the static files + assets
+let sentimentAvailable = false; // Flag to check if sentiment analysis is available
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
+
 
 // Express API 
 const app = express()
@@ -19,6 +24,7 @@ const port = 3000
 app.use(bodyParser.json())
 
 app.use(cors());
+
 
 
 app.post("/api/oauth", async (req, res) => {
@@ -69,6 +75,10 @@ app.post("/api/clearCache", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+app.get("/emotiv", (req, res) => {
+  res.sendFile(path.join(__dirname, 'emotiv.html'));
 });
 
 app.post("/completions", async (req, res) => {
@@ -132,6 +142,8 @@ app.post("/completions", async (req, res) => {
         completionText: response.data.choices[0].message.content,
         status: "success"
       })
+      // completion OpenAI API call 'successful', sentiment available to analyze
+      sentimentAvailable = true
     
     } catch (error) {
       console.log(error);
@@ -152,6 +164,78 @@ app.post("/completions", async (req, res) => {
 });
 
 
+
+function getLastOutputToEmbedd(email) {
+  const dbName = `${email}.json`
+  const data = readDb(dbName); // This function should read the content of the database
+  const lastEntry = data[data.length - 1]; // Get the last entry in the array
+  const lastOutputToEmbedd = lastEntry.output.text; // Get the last outputToEmbedd
+  return lastOutputToEmbedd;
+}
+
+const getEmailFromDb = () => {
+  const rawData = fs.readFileSync("db.json");
+  const parsedData = JSON.parse(rawData);
+  return parsedData[0].email;
+};
+
+app.get("/getSentiment", async (req, res) => {
+  try {
+    if (sentimentAvailable) {
+      const email = getEmailFromDb();
+      // Get the last outputToEmbedd from the database (modify the function according to your database structure)
+      const lastOutputToEmbedd = getLastOutputToEmbedd(email);
+
+      // Get the sentiment using OpenAI API
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "user",
+            content: `Please analyze the sentiment of the following text as either angry, apologetic, gracious, happy, musing, neutral, sad, surprised. Only one word, all letters lowercase: ${lastOutputToEmbedd}`,
+          },
+        ],
+        temperature: 0.5,
+        max_tokens: 50,
+        top_p: 1,
+        stop: ["\n"],
+      });
+
+      const sentiment = response.data.choices[0].message.content;
+
+      res.json({
+        sentiment: sentiment,
+      });
+      // Reset the sentimentAvailable flag to avoid multiple calls to the OpenAI API
+      sentimentAvailable = false;
+    } else {
+      res.json({
+        sentiment: null,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: "Error processing sentiment analysis",
+    });
+  }
+});
+
+app.get("/getFolders", (req, res) => {
+  const assetsPath = path.join(__dirname, "..", "src", "assets");
+  fs.readdir(assetsPath, { withFileTypes: true }, (err, files) => {
+    if (err) {
+      console.error("Error reading assets directory:", err);
+      res.status(500).send("Error reading assets directory");
+      return;
+    }
+
+    const folders = files
+      .filter((file) => file.isDirectory())
+      .map((folder) => folder.name);
+    res.json({ folders });
+  });
+});
 
 app.listen(port, () => {
     console.log(`Example app ready`)

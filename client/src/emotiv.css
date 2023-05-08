@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(47, 62, 106);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .container {
+    text-align: center;
+  }
+  h1 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 2rem;
+  }
+  #sentiment {
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 2rem;
+  }
+  #folder {
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 2rem;
+  }
+  #image {
+    max-width: 100%;
+    height: auto;
+  }
+  .image-transition {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .image-transition-hidden {
+    opacity: 0;
+  }
+  
